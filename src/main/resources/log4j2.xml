@@ -2,7 +2,7 @@
 <Configuration status="INFO">
     <properties>
         <property name="LOG_HOME">logs</property>
-        <property name="FILE_NAME">member-service</property>
+        <property name="FILE_NAME">erbing-member-service</property>
     </properties>
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT">
