@@ -1,0 +1,44 @@
+spring:
+  application:
+    name: erbing-member-service
+  profiles:
+    active: ${profile.active},jdbc,feign
+    env: ${profile.active}
+  cloud:
+    zookeeper:
+      connectString:
+      enabled: true
+      config:
+        enabled: true
+        root: /configurations/erbing/${profile.active}
+        defaultContext: apps
+        profileSeparator: ':'
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: false
+      exclude: static/**,public/**,thymeleaf/**,xlsx/**
+feign:
+  hystrix:
+    enabled: true
+
+---
+spring:
+  profiles: dev
+  cloud:
+    zookeeper:
+      connectString: 127.0.0.1:8761
+
+---
+spring:
+  profiles: test
+  cloud:
+    zookeeper:
+      connectString: 127.0.0.1:8761
+---
+spring:
+  profiles: prod
+  cloud:
+    zookeeper:
+      connectString: 127.0.0.1:8761
