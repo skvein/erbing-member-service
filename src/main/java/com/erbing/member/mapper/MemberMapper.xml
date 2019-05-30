@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.erbing.member.mapper.MemberMapper" >
     <sql id="Base_Column_List">
-        id,last_name,first_name, email,password,create_time, update_time
+        id,phone,profession,last_name,first_name, email,password,create_time, update_time
     </sql>
     <insert id="insert" useGeneratedKeys="true" keyProperty="id" >
         insert into mb_user (last_name,first_name, email,password)
@@ -10,4 +10,9 @@
          (#{lastName,jdbcType=VARCHAR},#{firstName,jdbcType=VARCHAR},
           #{email,jdbcType=VARCHAR}, #{passWord,jdbcType=VARCHAR})
     </insert>
+    <select id="selectByEmail" resultType="com.erbing.member.po.MbUser">
+        select <include refid="Base_Column_List"/>
+        from  mb_user
+        where email=#{email}
+    </select>
 </mapper>

@@ -1,44 +1,86 @@
+server:
+  port: 8102
 spring:
   application:
     name: erbing-member-service
   profiles:
-    active: ${profile.active},jdbc,feign
-    env: ${profile.active}
-  cloud:
-    zookeeper:
-      connectString:
-      enabled: true
-      config:
-        enabled: true
-        root: /configurations/erbing/${profile.active}
-        defaultContext: apps
-        profileSeparator: ':'
+    active: jdbc,feign
   devtools:
     livereload:
       enabled: true
     restart:
       enabled: false
       exclude: static/**,public/**,thymeleaf/**,xlsx/**
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    filters: stat,wall
+    initialSize: 20
+    maxActive: 50
+    maxPoolPreparedStatementPerConnectionSize: 20
+    maxWait: 60000
+    minEvictableIdleTimeMillis: 300000
+    minIdle: 5
+    poolPreparedStatements: true
+    testOnBorrow: false
+    testOnReturn: false
+    testWhileIdle: true
+    timeBetweenEvictionRunsMillis: 60000
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://localhost:3306/erbing?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    username: erbing
+    password: erbing
+    validationQuery: SELECT 1 FROM DUAL
+
+hystrix:
+  threadpool:
+    default:
+      maximumSize: 30
+      coreSize: 30
+  command:
+    default:
+      fallback:
+        enabled: true
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds:10000
 feign:
+  okhttp:
+    enabled: false
+  httpclient:
+    enabled: true
   hystrix:
     enabled: true
+  client:
+    config:
+      default:
+        connectTimeout: 2000
+        loggerLevel: basic
+        readTimeout: 10000
+  compression:
+    response:
+      enabled: true
+    request:
+      enabled: true
+      mime-types: text/xml,application/xml,application/json
+      min-request-size: 2048
+logging:
+  config: classpath:log4j2.xml
+#mybatis:
+#  mapper-locations: classpath:mybatis-config.xml
+#  config-location: classpath:com/erbing/member/**/*Mapper.xml
 
----
-spring:
-  profiles: dev
-  cloud:
-    zookeeper:
-      connectString: 127.0.0.1:8761
-
----
-spring:
-  profiles: test
-  cloud:
-    zookeeper:
-      connectString: 127.0.0.1:8761
----
-spring:
-  profiles: prod
-  cloud:
-    zookeeper:
-      connectString: 127.0.0.1:8761
+eureka:
+  instance:
+    lease-expiration-duration-in-seconds: 30
+    lease-renewal-interval-in-seconds: 10
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://root:123456@localhost:8761/eureka/
+    healthcheck:
+      enabled: true
+member:
+  email:
+    from: 584473028@qq.com
+    authorization: fpvfcvluzfexbcdf

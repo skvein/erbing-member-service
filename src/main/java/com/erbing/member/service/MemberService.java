@@ -7,4 +7,5 @@ import com.erbing.member.dto.MemberRegisterDTO;
  */
 public interface MemberService {
     Boolean register(MemberRegisterDTO param);
+
 }
